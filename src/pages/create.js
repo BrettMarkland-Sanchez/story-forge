@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Layout from '@/components/layout/Layout';
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const genres = [
   "Fantasy", "Science Fiction", "Mystery", "Romance", "Thriller", "Horror",
@@ -33,10 +35,14 @@ const settings = [
 export default function CreateStory() {
   const [selectedGenre, setSelectedGenre] = useState('');
   const [selectedSetting, setSelectedSetting] = useState('');
+  const [customCharacter, setCustomCharacter] = useState('');
+  const [customPlotElement, setCustomPlotElement] = useState('');
 
   const handleCreateStory = () => {
     // TODO: Implement story creation logic
     console.log('Creating story with genre:', selectedGenre, 'and setting:', selectedSetting);
+    console.log('Custom character:', customCharacter);
+    console.log('Custom plot element:', customPlotElement);
   };
 
   return (
@@ -45,9 +51,9 @@ export default function CreateStory() {
         <h1 className="text-4xl font-bold mb-6">Create Your Story</h1>
         <div className="space-y-6">
           <div>
-            <label className="block text-lg mb-2">Select a Genre</label>
+            <Label htmlFor="genre-select">Select a Genre</Label>
             <Select onValueChange={setSelectedGenre}>
-              <SelectTrigger>
+              <SelectTrigger id="genre-select">
                 <SelectValue placeholder="Choose a genre" />
               </SelectTrigger>
               <SelectContent>
@@ -58,9 +64,9 @@ export default function CreateStory() {
             </Select>
           </div>
           <div>
-            <label className="block text-lg mb-2">Select a Setting</label>
+            <Label htmlFor="setting-select">Select a Setting</Label>
             <Select onValueChange={setSelectedSetting}>
-              <SelectTrigger>
+              <SelectTrigger id="setting-select">
                 <SelectValue placeholder="Choose a setting" />
               </SelectTrigger>
               <SelectContent>
@@ -69,6 +75,24 @@ export default function CreateStory() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+          <div>
+            <Label htmlFor="custom-character">Custom Character (Optional)</Label>
+            <Input
+              id="custom-character"
+              placeholder="Enter a custom character"
+              value={customCharacter}
+              onChange={(e) => setCustomCharacter(e.target.value)}
+            />
+          </div>
+          <div>
+            <Label htmlFor="custom-plot">Custom Plot Element (Optional)</Label>
+            <Input
+              id="custom-plot"
+              placeholder="Enter a custom plot element"
+              value={customPlotElement}
+              onChange={(e) => setCustomPlotElement(e.target.value)}
+            />
           </div>
           <Button onClick={handleCreateStory} disabled={!selectedGenre || !selectedSetting}>
             Create Story
