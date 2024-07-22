@@ -14,19 +14,39 @@ import { Loader2 } from 'lucide-react';
 
 const genres = [
   "Fantasy", "Science Fiction", "Mystery", "Romance", "Thriller", "Horror",
-  // ... (rest of the genres)
+  "Historical Fiction", "Comedy", "Drama", "Adventure", "Dystopian", "Cyberpunk",
+  "Steampunk", "Superhero", "Noir", "Fairy Tale", "Urban Fantasy", "Paranormal",
+  "Western", "Mythology", "Espionage", "Detective", "Gothic", "Post-Apocalyptic",
+  "Magical Realism", "Space Opera", "Military Fiction", "Political Fiction",
+  "Psychological Thriller", "Legal Thriller", "Medical Thriller", "Techno-Thriller",
+  "Epic Fantasy", "Dark Fantasy", "Science Fantasy", "Crime Fiction", "Action",
+  "Slice of Life", "Satire", "Tragedy", "Bildungsroman", "Quest", "Saga", "Fable",
+  "Allegory", "Surrealism", "Speculative Fiction", "Time Travel", "Alternate History"
 ];
 
 const settings = [
   "Ancient Rome", "Medieval Europe", "Victorian England", "Wild West", "Future Earth",
-  // ... (rest of the settings)
+  "Alien Planet", "Cyberpunk City", "Post-Apocalyptic Wasteland", "Haunted House",
+  "Pirate Ship", "Mythical Kingdom", "Steampunk Metropolis", "Underwater City",
+  "Desert Oasis", "Snow-Covered Mountain Range", "Dense Jungle", "Bustling Space Station",
+  "Parallel Universe", "Deep Space Exploration", "Urban Underground", "Small Town America",
+  "Dystopian Megacity", "Samurai Japan", "Aztec Empire", "Caribbean Islands",
+  "Outer Space Colony", "Ancient Egypt", "Modern Suburbia", "Secret Government Facility",
+  "Remote Island", "Fantasy Forest", "Gothic Castle", "Enchanted Village",
+  "Dark Alleyways of a Noir City", "Viking Settlement", "Celestial Realm", "High School",
+  "Lost Civilization", "Galactic Empire", "Submarine Base", "Dreamscape", "Urban Sprawl",
+  "Isolated Research Lab", "Hidden Temple", "Fantasy Marketplace", "Quantum Realm",
+  "War-Torn Country", "Enchanted Garden"
 ];
+
+const difficulties = ["Easy", "Medium", "Hard"];
 
 const storySchema = z.object({
   genre: z.string().nonempty({ message: "Please select a genre" }),
   setting: z.string().nonempty({ message: "Please select a setting" }),
   customCharacter: z.string().optional(),
   customPlotElement: z.string().optional(),
+  difficulty: z.string().nonempty({ message: "Please select a difficulty" }),
 });
 
 export default function CreateStory() {
@@ -102,6 +122,20 @@ export default function CreateStory() {
               </SelectContent>
             </Select>
             {errors.setting && <p className="text-red-500">{errors.setting.message}</p>}
+          </div>
+          <div>
+            <Label htmlFor="difficulty-select">Select Difficulty</Label>
+            <Select onValueChange={(value) => register('difficulty').onChange({ target: { value } })}>
+              <SelectTrigger id="difficulty-select">
+                <SelectValue placeholder="Choose difficulty" />
+              </SelectTrigger>
+              <SelectContent>
+                {difficulties.map((difficulty) => (
+                  <SelectItem key={difficulty} value={difficulty.toLowerCase()}>{difficulty}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.difficulty && <p className="text-red-500">{errors.difficulty.message}</p>}
           </div>
           <div>
             <Label htmlFor="custom-character">Custom Character (Optional)</Label>
