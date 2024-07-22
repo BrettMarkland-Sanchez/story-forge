@@ -1,14 +1,14 @@
-import { getSession } from 'next-auth/react';
-import { Configuration, OpenAIApi } from 'openai';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../auth/[...nextauth]';
+import { OpenAI } from 'openai';
 import prisma from '@/lib/prisma';
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
     return res.status(401).json({ error: 'Unauthorized' });
@@ -28,18 +28,18 @@ export default async function handler(req, res) {
       }${customPlotElement ? ` The story should involve ${customPlotElement}.` : ''}`;
 
       // Generate story using OpenAI
-      const completion = await openai.createCompletion({
-        model: "text-davinci-002",
+      const completion = await openai.completions.create({
+        model: "text-davinci-003",
         prompt: prompt,
         max_tokens: 1000,
         temperature: 0.7,
       });
 
-      if (!completion.data.choices || completion.data.choices.length === 0) {
+      if (!completion.choices || completion.choices.length === 0) {
         throw new Error('Failed to generate story from OpenAI');
       }
 
-      const generatedStory = completion.data.choices[0].text.trim();
+      const generatedStory = completion.choices[0].text.trim();
 
       // Save the story to the database
       const story = await prisma.story.create({
