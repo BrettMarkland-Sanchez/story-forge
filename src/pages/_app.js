@@ -1,12 +1,17 @@
 import "@/styles/globals.css";
-import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "next-themes";
+import { SessionProvider } from "next-auth/react";
+import { Provider } from 'react-redux';
+import { store } from '@/store/store';
 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps: { session, ...pageProps } }) {
   return (
-    <>
-      <Component {...pageProps} />
-      <Toaster />
-    </>
+    <SessionProvider session={session}>
+      <Provider store={store}>
+        <ThemeProvider attribute="class">
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </Provider>
+    </SessionProvider>
   );
 }
-
