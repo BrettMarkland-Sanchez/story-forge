@@ -1,24 +1,25 @@
-import { Button } from "@/components/ui/button"
+import Layout from '@/components/layout/Layout';
+import { Button } from "@/components/ui/button";
+import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to your App
-        </h1>
-
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
-            pages/index.js
-          </code>
+    <Layout>
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
+        <h1 className="text-6xl font-bold mb-6">Welcome to StoryForge</h1>
+        <p className="text-2xl mb-8 text-center max-w-2xl">
+          Embark on an epic journey through interactive storytelling. 
+          Create your own adventures or dive into worlds crafted by others.
         </p>
-
-        <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-          <Button className="mt-4">Hello World</Button>
+        <div className="space-x-4">
+          <Link href="/create">
+            <Button size="lg">Start Your Adventure</Button>
+          </Link>
+          <Link href="/explore">
+            <Button size="lg" variant="outline">Explore Stories</Button>
+          </Link>
         </div>
-      </main>
-    </div>
-  )
+      </div>
+    </Layout>
+  );
 }
