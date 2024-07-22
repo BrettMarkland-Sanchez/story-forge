@@ -21,6 +21,10 @@ export default async function handler(req, res) {
       console.log('Processing POST request');
       const { genre, setting, customCharacter, customPlotElement } = req.body;
 
+      if (!genre || !setting) {
+        return res.status(400).json({ error: 'Genre and setting are required' });
+      }
+
       // Generate story prompt
       const prompt = `Create a short story in the ${genre} genre, set in ${setting}.${customCharacter ? ` Include a character named ${customCharacter}.` : ''}${customPlotElement ? ` The story should involve ${customPlotElement}.` : ''}`;
 
@@ -31,6 +35,10 @@ export default async function handler(req, res) {
         prompt: prompt,
         max_tokens: 500,
       });
+
+      if (!completion.data.choices || completion.data.choices.length === 0) {
+        throw new Error('Failed to generate story from OpenAI');
+      }
 
       const generatedStory = completion.data.choices[0].text.trim();
 
