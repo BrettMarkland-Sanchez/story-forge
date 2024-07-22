@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useToast } from "@/components/ui/use-toast";
 
 const genres = [
   "Fantasy", "Science Fiction", "Mystery", "Romance", "Thriller", "Horror",
@@ -29,14 +30,43 @@ const storySchema = z.object({
 
 export default function CreateStory() {
   const dispatch = useDispatch();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(storySchema)
   });
 
-  const onSubmit = (data) => {
-    console.log('Creating story with data:', data);
-    dispatch(setCurrentStory(data));
-    // TODO: Send data to API
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/stories/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create story');
+      }
+
+      const result = await response.json();
+      dispatch(setCurrentStory({ ...data, generatedStory: result.story }));
+      toast({
+        title: "Story created!",
+        description: "Your story has been generated successfully.",
+      });
+    } catch (error) {
+      console.error('Error creating story:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create story. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -88,8 +118,8 @@ export default function CreateStory() {
               {...register('customPlotElement')}
             />
           </div>
-          <Button type="submit">
-            Create Story
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? 'Creating Story...' : 'Create Story'}
           </Button>
         </form>
       </div>
