@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useToast } from "@/components/ui/use-toast";
+import { Loader2 } from 'lucide-react';
 
 const genres = [
   "Fantasy", "Science Fiction", "Mystery", "Romance", "Thriller", "Horror",
@@ -119,7 +120,14 @@ export default function CreateStory() {
             />
           </div>
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? 'Creating Story...' : 'Create Story'}
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Creating Story...
+              </>
+            ) : (
+              'Create Story'
+            )}
           </Button>
         </form>
       </div>
